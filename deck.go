@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"strings"
+)
 
 // create a new type of 'deck'
 // which is a slice of strings
@@ -19,13 +23,14 @@ func newDeck() deck {
 	for _, suit := range cardSuits {
 		for _, value := range cardValues {
 			// add each card to empty deck (cards)
-			cards = append(cards, value + " of " + suit)
+			cards = append(cards, value+" of "+suit)
 		}
 	}
 	// return slice of cards we've created
 	return cards
 }
 
+// reciever of deck
 func (d deck) print() {
 	for i, card := range d {
 		fmt.Println(i, card)
@@ -35,4 +40,13 @@ func (d deck) print() {
 // using multiple arguments inside of function call, return two values of type deck
 func deal(d deck, handSize int) (deck, deck) {
 	return d[:handSize], d[handSize:]
+}
+
+// helper function to recieve a deck and return string
+func (d deck) toString() string {
+	return strings.Join([]string(d), ",")
+}
+
+func (d deck) saveToFile(filename string) error {
+	return os.WriteFile(filename, []byte(d.toString()), 0666)
 }
