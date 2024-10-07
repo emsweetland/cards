@@ -50,3 +50,21 @@ func (d deck) toString() string {
 func (d deck) saveToFile(filename string) error {
 	return os.WriteFile(filename, []byte(d.toString()), 0666)
 }
+
+// no reciever, getting access to a deck we don't have yet
+func newDeckFromFile(filename string) deck {
+	// ReadFile will return a byte slice, and an error
+	bs, err := os.ReadFile(filename)
+	//check if error was returned
+	if err != nil {
+		// option #1 - log the error, return call to newDeck()
+		// option #1 - log the error, quit the program
+		fmt.Println("Error:", err)
+		os.Exit(1)
+	}
+
+	// s for slice of strings, slice, etc
+	s := strings.Split(string(bs), ",")
+	// type conversion from slice of string to deck
+	return deck(s)
+}
