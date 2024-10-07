@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
 	"strings"
+	"time"
 )
 
 // create a new type of 'deck'
@@ -67,4 +69,20 @@ func newDeckFromFile(filename string) deck {
 	s := strings.Split(string(bs), ",")
 	// type conversion from slice of string to deck
 	return deck(s)
+}
+
+// recieves a deck to shuffle
+func (d deck) shuffle() {
+	// using time to seed our random generator
+	// this is no longer necessary, as of Go 1.20
+	source := rand.NewSource(time.Now().UnixNano())
+	r := rand.New(source)
+
+	// index in the range of deck
+	for i := range d {
+		// random integer within the length of deck -1
+		newPosition := r.Intn(len(d) - 1)
+		// swap elements at their positions
+		d[i], d[newPosition] = d[newPosition], d[i]
+	}
 }
